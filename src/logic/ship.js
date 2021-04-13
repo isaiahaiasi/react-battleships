@@ -23,5 +23,10 @@ export default function ship(length, hits = getEmptyArray(length)) {
 
   const isSunk = () => !hits.includes(false);
 
-  return { length, hit, getHits, isSunk };
+  return {
+    length,
+    hit,
+    getHits,
+    isSunk,
+  };
 }

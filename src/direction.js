@@ -1,5 +1,6 @@
 // I need to double-freeze, or else you could still assign dir.up[0]
-const vec2 = (x, y) => Object.freeze({ x, y });
+const vec2 = (x, y) =>
+  Object.freeze({ x, y, equals: (pos) => pos.x === x && pos.y === y });
 
 const dir = Object.freeze({
   up: vec2(0, -1),

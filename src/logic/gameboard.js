@@ -5,17 +5,12 @@ export default function gameboardCaller(length) {
   return gameboard(length);
 }
 
-function gameboard(length, boardArray = [], ships = [], misses = []) {
-  const getBoardIndex = (pos) => pos.y * length + pos.x;
-
+function gameboard(length, ships = [], misses = []) {
   const posOutOfBounds = (pos) =>
     pos.x < 0 || pos.x > length - 1 || pos.y < 0 || pos.y > length - 1;
 
-  // I'm pretty sure this is a "reducible" functional pattern
-  const getCoords = (pos) => boardArray[getBoardIndex(pos)];
-
   const addShip = (ship, origin, orientation) => {
-    const newBoardArray = [...boardArray];
+    const positions = [];
     for (let i = 0; i < ship.length; i++) {
       const pos = vec2(
         origin.x + orientation.x * i,
@@ -27,38 +22,43 @@ function gameboard(length, boardArray = [], ships = [], misses = []) {
           `Tried to add ship at illegal board position(${pos.x}, ${pos.y})`
         );
       }
-      const index = getBoardIndex(pos);
-
-      // Don't like this, but this seems like the simplest way to hold this info
-      newBoardArray[index] = { ship, i };
+      positions[i] = pos;
     }
-    return gameboard(length, newBoardArray, [...ships, ship], misses);
+
+    return gameboard(length, [...ships, { ship, positions }], misses);
   };
 
-  const receiveHit = (pos) => {
-    if (posOutOfBounds(pos)) {
+  const receiveHit = (hitPos) => {
+    if (posOutOfBounds(hitPos)) {
       throw new Error(
-        `Tried to receive hit at illegal board position (${pos.x}, ${pos.y})`
+        `Tried to receive hit at illegal board position (${hitPos.x}, ${hitPos.y})`
       );
     }
 
-    const posInfo = boardArray[getBoardIndex(pos)];
+    // try to find a ship at that position
+    const hitShip = ships.find((ship) =>
+      ship.positions.some((position) => position.equals(hitPos))
+    );
 
-    if (posInfo) {
-      const newShip = posInfo.ship.hit(posInfo.i);
-      // get new ships array
-      const newShips = ships.filter((ship) => ship !== posInfo.ship);
-      console.log(newShips);
-      newShips.push(newShip);
-      // return new board
-      return gameboard(length, boardArray, newShips, misses);
+    if (hitShip) {
+      // Find which segment of the ship was hit by matching board-space coords
+      const hitSegment = hitShip.positions.findIndex((position) =>
+        position.equals(hitPos)
+      );
+
+      // remove hitship from ships and replace with newship
+      const newShip = hitShip.ship.hit(hitSegment);
+      const newShips = [...ships].splice(0, ships.indexOf(hitShip), 1);
+      newShips.push({ ship: newShip, positions: hitShip.positions });
+
+      return gameboard(length, newShips, misses);
     } else {
-      const newMisses = [...misses, pos];
-      return gameboard(length, boardArray, ships, newMisses);
+      const newMisses = [...misses, hitPos];
+      return gameboard(length, ships, newMisses);
     }
   };
 
-  const isEveryShipSunk = () => ships.every((ship) => ship.isSunk());
+  const isEveryShipSunk = () => ships.every((ship) => ship.ship.isSunk());
 
-  return { addShip, getCoords, receiveHit, misses, isEveryShipSunk };
+  return { addShip, receiveHit, misses, isEveryShipSunk };
 }
