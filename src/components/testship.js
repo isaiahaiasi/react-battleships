@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function TestShip({ hits, handleHit }) {
+export default function TestShip({ ship, handleHit }) {
   const [count, setCount] = useState(0);
 
   const onHit = () => {
@@ -11,7 +11,7 @@ export default function TestShip({ hits, handleHit }) {
   return (
     <div>
       <ol>
-        {hits.map((h, i) => (
+        {ship.getHits().map((h, i) => (
           <li key={i}>{h.toString()}</li>
         ))}
       </ol>

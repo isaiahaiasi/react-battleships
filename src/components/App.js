@@ -2,20 +2,17 @@ import { useState } from "react";
 import TestShip from "./testship";
 import ship from "../logic/ship";
 
-// This sucks. I hate this.
-const test = ship(5);
+// Not sure I'm okay with this approach
 function App() {
-  const [hits, setHits] = useState(test.getHits());
+  const [testShip, setTestShip] = useState(ship(3));
 
   const handleHit = (num) => {
-    test.hit(num);
-    console.log(test.getHits());
-    setHits(test.getHits());
+    setTestShip((prev) => prev.hit(num));
   };
 
   return (
     <div className="App">
-      <TestShip handleHit={handleHit} hits={hits} />
+      <TestShip handleHit={handleHit} ship={testShip} />
     </div>
   );
 }
