@@ -77,9 +77,13 @@ test("added ships should be visible at their coordinates (facing left)", () => {
   });
 });
 
-xtest("should not be able to place a ship beyond bounds of array", () => {});
-
-xtest("should not be able to place board at illegal position.", () => {});
+test("should throw error when attempting to add ship outside array bounds", () => {
+  const testShip = ship(3);
+  let testBoard = board(5);
+  expect(() => {
+    testBoard.addShip(testShip, vec2(4, 0), dir.right);
+  }).toThrowError();
+});
 
 xtest("should be able to receive hit", () => {});
 
