@@ -12,12 +12,12 @@ const getEmptyArray = (len) => {
 export default function ship(length, hits = getEmptyArray(length)) {
   const getHits = () => [...hits];
 
-  const hit = (num) => {
-    if (num > length - 1 || num < 0) {
-      throw new Error(`Tried to hit a ship at illegal position ${num}`);
+  const hit = (hitPos) => {
+    if (hitPos > length - 1 || hitPos < 0) {
+      throw new Error(`Tried to hit a ship at illegal position ${hitPos}`);
     }
     const newHits = getHits();
-    newHits[num] = true;
+    newHits[hitPos] = true;
     return ship(length, newHits);
   };
 
