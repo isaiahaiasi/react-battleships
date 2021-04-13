@@ -14,3 +14,12 @@ test("Should know whether or not it's been sunk", () => {
   testShip.hit(2);
   expect(testShip.isSunk()).toBe(true);
 });
+
+test("getHits() should return expected value", () => {
+  const testShip = ship(3);
+  expect(testShip.getHits()).toEqual([false, false, false]);
+  testShip.hit(0);
+  expect(testShip.getHits()).toEqual([true, false, false]);
+  testShip.hit(2);
+  expect(testShip.getHits()).toEqual([true, false, true]);
+});

@@ -5,6 +5,8 @@ export default function ship(length) {
     hits[i] = false;
   }
 
+  const getHits = () => [...hits];
+
   const hit = (i) => {
     if (i > length - 1 || i < 0) {
       throw new Error(`Tried to hit a ship at illegal position ${i}`);
@@ -14,5 +16,5 @@ export default function ship(length) {
 
   const isSunk = () => !hits.includes(false);
 
-  return { length, hit, isSunk };
+  return { length, hit, getHits, isSunk };
 }
