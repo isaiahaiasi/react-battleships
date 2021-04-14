@@ -6,49 +6,45 @@ test("should return an object with an x and a y", () => {
   expect(v.y).toBe(5);
 });
 
+test("should correctly evaluate the equality of 2 vec2s", () => {
+  const v1 = vec2(0, 0);
+  const v2 = vec2(0, 0);
+  const v3 = vec2(3, 0);
+  expect(v1.equals(v2)).toBe(true);
+  expect(v1.equals(v3)).toBe(false);
+});
+
 test("should be able to add 2 vectors", () => {
   const v1 = vec2(3, 5);
   const v2 = vec2(4, 10);
   const v3 = v1.add(v2);
-  expect(v3.x).toBe(7);
-  expect(v3.y).toBe(15);
+  expect(v3.equals(vec2(7, 15))).toBe(true);
 });
 
 test("should be able to multiply 2 vectors", () => {
   const v1 = vec2(3, 5);
-  const v2 = vec2(4, 10);
+  const v2 = vec2(0, 10);
   const v3 = v1.multiply(v2);
-  expect(v3.x).toBe(12);
-  expect(v3.y).toBe(50);
+  expect(v3.equals(vec2(0, 50))).toBe(true);
 });
 
 test("should be able to add a vector by a scalar", () => {
   const v1 = vec2(3, 5);
   const s = 5;
   const v3 = v1.add(s);
-  expect(v3.x).toBe(8);
-  expect(v3.y).toBe(10);
+  expect(v3.equals(vec2(8, 10))).toBe(true);
 });
 
 test("should be able to multiply a vector by a scalar", () => {
   const v1 = vec2(3, 5);
   const s = 3;
   const v3 = v1.multiply(s);
-  expect(v3.x).toBe(9);
-  expect(v3.y).toBe(15);
+  expect(v3.equals(vec2(9, 15))).toBe(true);
 });
 
 test("should be able to fetch all cardinal directions", () => {
-  const right = direction.right;
-  const down = direction.down;
-  const left = direction.left;
-  const up = direction.up;
-  expect(up.x).toBe(0);
-  expect(up.y).toBe(-1);
-  expect(right.x).toBe(1);
-  expect(right.y).toBe(0);
-  expect(down.x).toBe(0);
-  expect(down.y).toBe(1);
-  expect(left.x).toBe(-1);
-  expect(left.y).toBe(0);
+  expect(direction.up.equals(vec2(0, -1))).toBe(true);
+  expect(direction.right.equals(vec2(1, 0))).toBe(true);
+  expect(direction.down.equals(vec2(0, 1))).toBe(true);
+  expect(direction.left.equals(vec2(-1, 0))).toBe(true);
 });

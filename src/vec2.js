@@ -2,7 +2,7 @@
 const vec2 = (x, y) => {
   const equals = (v) => v.x === x && v.y === y;
 
-  const isVec2 = (v) => v.x && v.y;
+  const isVec2 = (v) => v.x != null && v.y != null;
 
   const add = (v) => (isVec2(v) ? vec2(x + v.x, y + v.y) : vec2(x + v, y + v));
 
