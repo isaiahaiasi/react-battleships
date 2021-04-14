@@ -1,4 +1,4 @@
-import { vec2 } from "../direction";
+import vec2 from "../vec2";
 
 // I want to make the full constructor private
 export default function gameboardCaller(length) {

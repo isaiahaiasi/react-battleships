@@ -1,6 +1,6 @@
 import board from "../logic/gameboard";
 import ship from "../logic/ship";
-import dir, { vec2 } from "../direction";
+import vec2, { direction as dir } from "../vec2";
 
 test("should be able to receive hit", () => {
   const testBoard = board(3);
