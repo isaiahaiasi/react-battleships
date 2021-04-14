@@ -34,6 +34,5 @@ test("should return correct board-space coordinates", () => {
 });
 
 test("should throw error when attempting to hit invalid segment", () => {
-  const testShip = ship(3);
-  expect(() => testShip.hit(5)).toThrowError();
+  expect(() => ship(3).hit(5)).toThrowError();
 });

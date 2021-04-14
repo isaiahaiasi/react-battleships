@@ -1,18 +1,18 @@
 import { useState } from "react";
-import TestShip from "./testship";
-import ship from "../logic/ship";
-
+import gameboard from "../logic/gameboard";
+import Gameboard from "./Gameboard";
 // Not sure I'm okay with this approach
 function App() {
-  const [testShip, setTestShip] = useState(ship(3));
+  const [testBoard, updateTestBoard] = useState(gameboard(5));
 
-  const handleHit = (num) => {
-    setTestShip((prev) => prev.hit(num));
+  const handleMove = (num) => {
+    console.log(`handling move (${num.x}, ${num.y})`);
+    updateTestBoard((prev) => prev.receiveHit(num));
   };
 
   return (
     <div className="App">
-      <TestShip handleHit={handleHit} ship={testShip} />
+      <Gameboard handleMove={handleMove} gameboard={testBoard} />
     </div>
   );
 }

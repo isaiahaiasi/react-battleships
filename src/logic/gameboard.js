@@ -3,9 +3,9 @@ export default function gameboardCaller(length) {
   return gameboard(length);
 }
 
-function gameboard(length, ships = [], misses = []) {
+function gameboard(size, ships = [], misses = []) {
   const posOutOfBounds = (pos) =>
-    pos.x < 0 || pos.x > length - 1 || pos.y < 0 || pos.y > length - 1;
+    pos.x < 0 || pos.x > size - 1 || pos.y < 0 || pos.y > size - 1;
 
   const posContainsShip = (pos) =>
     ships.some((ship) => ship.getBoardSpaceCoords().some((v) => v.equals(pos)));
@@ -17,7 +17,7 @@ function gameboard(length, ships = [], misses = []) {
       throw new Error(`Tried to add ship at illegal board position`);
     }
 
-    return gameboard(length, [...ships, ship], misses);
+    return gameboard(size, [...ships, ship], misses);
   };
 
   const receiveHit = (hitPos) => {
@@ -44,14 +44,14 @@ function gameboard(length, ships = [], misses = []) {
       const newShips = [...ships].splice(0, ships.indexOf(hitShip), 1);
       newShips.push(newShip);
 
-      return gameboard(length, newShips, misses);
+      return gameboard(size, newShips, misses);
     } else {
       const newMisses = [...misses, hitPos];
-      return gameboard(length, ships, newMisses);
+      return gameboard(size, ships, newMisses);
     }
   };
 
   const isEveryShipSunk = () => ships.every((ship) => ship.isSunk());
 
-  return { addShip, receiveHit, misses, isEveryShipSunk, isValidShipPos };
+  return { size, addShip, receiveHit, misses, isEveryShipSunk, isValidShipPos };
 }
