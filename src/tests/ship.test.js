@@ -32,3 +32,8 @@ test("should return correct board-space coordinates", () => {
   expect(coords[1].equals(vec2(3, 6))).toBe(true);
   expect(coords[2].equals(vec2(3, 7))).toBe(true);
 });
+
+test("should throw error when attempting to hit invalid segment", () => {
+  const testShip = ship(3);
+  expect(() => testShip.hit(5)).toThrowError();
+});
