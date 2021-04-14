@@ -6,11 +6,21 @@ const getEmptyArray = (len) => {
   return arr;
 };
 
-// going to try to make this in a "functional" way
-// (or at least--make it not have any mutable state)
-// for React compatibility...
-export default function ship(length, hits = getEmptyArray(length)) {
+export default function ship(
+  length,
+  origin,
+  rotation,
+  hits = getEmptyArray(length)
+) {
   const getHits = () => [...hits];
+
+  const getBoardSpaceCoords = () => {
+    const boardSpaceCoords = [];
+    for (let i = 0; i < length; i++) {
+      boardSpaceCoords.push(rotation.multiply(i).add(origin));
+    }
+    return boardSpaceCoords;
+  };
 
   const hit = (hitPos) => {
     if (hitPos > length - 1 || hitPos < 0) {
@@ -18,7 +28,7 @@ export default function ship(length, hits = getEmptyArray(length)) {
     }
     const newHits = getHits();
     newHits[hitPos] = true;
-    return ship(length, newHits);
+    return ship(length, origin, rotation, newHits);
   };
 
   const isSunk = () => !hits.includes(false);
@@ -28,5 +38,6 @@ export default function ship(length, hits = getEmptyArray(length)) {
     hit,
     getHits,
     isSunk,
+    getBoardSpaceCoords,
   };
 }
