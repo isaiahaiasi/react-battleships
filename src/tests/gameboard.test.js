@@ -7,11 +7,21 @@ test("gameboard size should be accurate", () => {
   expect(testBoard.size).toBe(3);
 });
 
-test("should be able to receive hit", () => {
+test("isMissPos() should return true if position is a miss, false if not", () => {
   const testBoard = board(3);
   const testBoardHit = testBoard.receiveHit(vec2(0, 0));
   expect(testBoardHit).not.toBe(testBoard);
-  expect(testBoardHit.misses.length).toBe(1);
+  expect(testBoardHit.isMissPos(vec2(0, 0))).toBe(true);
+  expect(testBoardHit.isMissPos(vec2(1, 0))).toBe(false);
+});
+
+test("isHitPos() should return true if position is a hit, false if not", () => {
+  const testBoard = board(5)
+    .addShip(ship(3, vec2(0, 0), dir.down))
+    .receiveHit(vec2(0, 1));
+  expect(testBoard.isHitPos(vec2(1, 0))).toBe(false);
+  expect(testBoard.isHitPos(vec2(0, 0))).toBe(false);
+  expect(testBoard.isHitPos(vec2(0, 1))).toBe(true);
 });
 
 test("should throw error when attempting to hit outside array bounds", () => {
