@@ -12,7 +12,17 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{
+        padding: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <h1>REACT-BATTLESHIP</h1>
       <div>Turn: {turn}</div>
       <h2>NPC board</h2>
       <AttackableBoard

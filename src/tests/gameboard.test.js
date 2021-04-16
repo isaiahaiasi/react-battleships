@@ -2,6 +2,11 @@ import board from "../logic/gameboard";
 import ship from "../logic/ship";
 import vec2, { direction as dir } from "../vec2";
 
+test("gameboard size should be accurate", () => {
+  const testBoard = board(3);
+  expect(testBoard.size).toBe(3);
+});
+
 test("should be able to receive hit", () => {
   const testBoard = board(3);
   const testBoardHit = testBoard.receiveHit(vec2(0, 0));

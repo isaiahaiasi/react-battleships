@@ -1,4 +1,5 @@
 import React from "react";
+import StyledBoard from "../styled-components/styled-gameboard";
 import vec2 from "../vec2";
 
 export default function Gameboard({ onCellClick, gameboard }) {
@@ -16,12 +17,13 @@ export default function Gameboard({ onCellClick, gameboard }) {
             onClick={onCellClick ? () => onCellClick(pos) : () => {}}
             style={isPreviousMiss ? { backgroundColor: "red" } : {}}
           >
-            row ({j}, {i})
+            {"ABCDEFJHIJKLMNOP".split("")[j]}
+            {i + 1}
           </div>
         );
       }
     }
     return rows;
   };
-  return <div>{renderBoard()}</div>;
+  return <StyledBoard size={gameboard.size}>{renderBoard()}</StyledBoard>;
 }
