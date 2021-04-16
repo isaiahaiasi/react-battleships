@@ -8,14 +8,23 @@ export default function Gameboard({ onCellClick, gameboard }) {
     for (let i = 0; i < gameboard.size; i++) {
       for (let j = 0; j < gameboard.size; j++) {
         const pos = vec2(j, i);
-        const isPreviousMiss = gameboard.misses.some((v) => v.equals(pos));
+        const isMiss = gameboard.isMissPos(pos);
+        const isHit = gameboard.isHitPos(pos);
+
+        let backgroundColor = "white";
+
+        if (isMiss) {
+          backgroundColor = "red";
+        } else if (isHit) {
+          backgroundColor = "green";
+        }
 
         rows.push(
           <div
             key={j + i * gameboard.size}
             // TODO: pretty sure there's a better way
             onClick={onCellClick ? () => onCellClick(pos) : () => {}}
-            style={isPreviousMiss ? { backgroundColor: "red" } : {}}
+            style={{ backgroundColor }}
           >
             {"ABCDEFJHIJKLMNOP".split("")[j]}
             {i + 1}

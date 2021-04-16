@@ -59,8 +59,7 @@ function gameboard(size, ships = [], misses = []) {
 
       // remove hitship from ships and replace with newship
       const newShip = hitShip.hit(hitSegment);
-      const newShips = [...ships].splice(0, ships.indexOf(hitShip), 1);
-      newShips.push(newShip);
+      const newShips = ships.map((ship) => (ship === hitShip ? newShip : ship));
 
       return gameboard(size, newShips, misses);
     } else {

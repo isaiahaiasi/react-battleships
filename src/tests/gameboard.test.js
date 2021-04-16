@@ -15,13 +15,19 @@ test("isMissPos() should return true if position is a miss, false if not", () =>
   expect(testBoardHit.isMissPos(vec2(1, 0))).toBe(false);
 });
 
+// currently, only one ship's hitPos's are being remembered at a time
+// when another ship takes damage, the previous one is forgotten
 test("isHitPos() should return true if position is a hit, false if not", () => {
-  const testBoard = board(5)
+  const testBoard = board(10)
     .addShip(ship(3, vec2(0, 0), dir.down))
-    .receiveHit(vec2(0, 1));
-  expect(testBoard.isHitPos(vec2(1, 0))).toBe(false);
+    .addShip(ship(4, vec2(1, 2), dir.right))
+    .receiveHit(vec2(1, 2));
+  expect(testBoard.isHitPos(vec2(1, 2))).toBe(true);
   expect(testBoard.isHitPos(vec2(0, 0))).toBe(false);
-  expect(testBoard.isHitPos(vec2(0, 1))).toBe(true);
+
+  // I had a completely messed up the splice on the ships array all week... smdh
+  const testBoard2 = testBoard.receiveHit(vec2(0, 0));
+  expect(testBoard2.isHitPos(vec2(1, 2))).toBe(true);
 });
 
 test("should throw error when attempting to hit outside array bounds", () => {

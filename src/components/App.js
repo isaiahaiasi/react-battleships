@@ -1,37 +1,17 @@
-import { useState } from "react";
+import React from "react";
+import ship from "../logic/ship";
+import vec2, { direction } from "../vec2";
 import gameboard from "../logic/gameboard";
-import AttackableBoard from "./AttackableBoard";
+import MainGame from "./MainGame";
 
-// Not sure I'm okay with this approach
-function App() {
-  const [testBoard, updateTestBoard] = useState(gameboard(5));
-  const [turn, setTurn] = useState(0);
-
-  const incrementTurn = () => {
-    setTurn((prev) => prev + 1);
-  };
-
+export default function App() {
+  const startingBoard = gameboard(10)
+    .addShip(ship(3, vec2(0, 0), direction.down))
+    .addShip(ship(4, vec2(1, 2), direction.right))
+    .addShip(ship(3, vec2(9, 9), direction.up));
   return (
-    <div
-      className="App"
-      style={{
-        padding: "2rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <h1>REACT-BATTLESHIP</h1>
-      <div>Turn: {turn}</div>
-      <h2>NPC board</h2>
-      <AttackableBoard
-        gameboard={testBoard}
-        setGameboard={updateTestBoard}
-        onAttack={incrementTurn}
-      />
+    <div>
+      <MainGame startingBoard={startingBoard} />
     </div>
   );
 }
-
-export default App;
