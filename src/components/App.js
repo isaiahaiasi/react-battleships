@@ -1,18 +1,25 @@
 import { useState } from "react";
 import gameboard from "../logic/gameboard";
-import Gameboard from "./Gameboard";
+import AttackableBoard from "./AttackableBoard";
+
 // Not sure I'm okay with this approach
 function App() {
   const [testBoard, updateTestBoard] = useState(gameboard(5));
+  const [turn, setTurn] = useState(0);
 
-  const handleMove = (num) => {
-    console.log(`handling move (${num.x}, ${num.y})`);
-    updateTestBoard((prev) => prev.receiveHit(num));
+  const incrementTurn = () => {
+    setTurn((prev) => prev + 1);
   };
 
   return (
     <div className="App">
-      <Gameboard handleMove={handleMove} gameboard={testBoard} />
+      <div>Turn: {turn}</div>
+      <h2>NPC board</h2>
+      <AttackableBoard
+        gameboard={testBoard}
+        setGameboard={updateTestBoard}
+        onAttack={incrementTurn}
+      />
     </div>
   );
 }

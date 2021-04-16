@@ -1,21 +1,23 @@
 import React from "react";
 import vec2 from "../vec2";
 
-export default function Gameboard({ handleMove, gameboard }) {
+export default function Gameboard({ onCellClick, gameboard }) {
   const renderBoard = () => {
     const rows = [];
     for (let i = 0; i < gameboard.size; i++) {
       for (let j = 0; j < gameboard.size; j++) {
         const pos = vec2(j, i);
         const isPreviousMiss = gameboard.misses.some((v) => v.equals(pos));
+
         rows.push(
-          <button
+          <div
             key={j + i * gameboard.size}
-            onClick={() => handleMove(pos)}
-            disabled={isPreviousMiss}
+            // TODO: pretty sure there's a better way
+            onClick={onCellClick ? () => onCellClick(pos) : () => {}}
+            style={isPreviousMiss ? { backgroundColor: "red" } : {}}
           >
             row ({j}, {i})
-          </button>
+          </div>
         );
       }
     }
