@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AttackableBoard from "./AttackableBoard";
 
 // Not sure I'm okay with this approach
-function MainGame({ startingBoard }) {
+function MainGame({ startingBoard, onGameOver }) {
   const [testBoard, updateTestBoard] = useState(startingBoard);
   const [turn, setTurn] = useState(0);
+
+  // I can't check isEveryShipSunk until testBoard is updated
+  // and I'm not sure yet how to properly handle that in my incrementTurn cb
+  useEffect(() => {
+    if (testBoard.isEveryShipSunk()) {
+      onGameOver("Player");
+    }
+  }, [testBoard, onGameOver]);
 
   const incrementTurn = () => {
     setTurn((prev) => prev + 1);
