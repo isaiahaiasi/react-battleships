@@ -25,4 +25,11 @@ export const direction = Object.freeze({
   left: vec2(-1, 0),
 });
 
+export const indexedDirection = [
+  direction.up,
+  direction.right,
+  direction.down,
+  direction.left,
+];
+
 export default vec2;

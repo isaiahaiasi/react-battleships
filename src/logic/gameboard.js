@@ -24,14 +24,17 @@ function gameboard(size, ships = [], misses = []) {
     });
   };
 
-  const isValidShipPos = (pos) => !isOutOfBounds(pos) && !posContainsShip(pos);
+  const isValidShipPos = (ship) =>
+    ship
+      .getBoardSpaceCoords()
+      .every((pos) => !isOutOfBounds(pos) && !posContainsShip(pos));
 
-  const isValidMove = (pos) => {
+  const isValidMovePos = (pos) => {
     return !isOutOfBounds(pos) && !isMissPos(pos) && !isHitPos(pos);
   };
 
   const addShip = (ship) => {
-    if (ship.getBoardSpaceCoords().some((pos) => !isValidShipPos(pos))) {
+    if (!isValidShipPos(ship)) {
       throw new Error(`Tried to add ship at illegal board position`);
     }
 
@@ -76,7 +79,7 @@ function gameboard(size, ships = [], misses = []) {
     receiveHit,
     isEveryShipSunk,
     isValidShipPos,
-    isValidMove,
+    isValidMovePos,
     isMissPos,
     isHitPos,
   };

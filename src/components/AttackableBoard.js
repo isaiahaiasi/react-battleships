@@ -3,7 +3,7 @@ import Gameboard from "./Gameboard";
 
 export default function AttackableBoard({ gameboard, setGameboard, onAttack }) {
   const handleAttack = (pos) => {
-    if (!gameboard.isValidMove(pos)) {
+    if (!gameboard.isValidMovePos(pos)) {
       return;
     }
 

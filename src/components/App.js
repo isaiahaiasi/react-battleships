@@ -7,7 +7,7 @@ import MainGame from "./MainGame";
 export default function App() {
   const useBoardPlayer = useState(() =>
     gameboard(10)
-      .addShip(ship(3, vec2(0, 0), dir.down))
+      .addShip(ship(3, vec2(0, 0), dir.right))
       .addShip(ship(4, vec2(1, 2), dir.right))
       .addShip(ship(3, vec2(9, 9), dir.up))
       .addShip(ship(5, vec2(8, 3), dir.left))

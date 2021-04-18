@@ -72,29 +72,29 @@ test("should throw error when adding ship outside array bounds", () => {
   }).toThrowError();
 });
 
-test("isValidMove should return false if position is out of bounds", () => {
+test("isValidMovePos should return false if position is out of bounds", () => {
   const testBoard = board(5);
-  expect(testBoard.isValidMove(vec2(-1, 0))).toBe(false);
-  expect(testBoard.isValidMove(vec2(3, 8))).toBe(false);
+  expect(testBoard.isValidMovePos(vec2(-1, 0))).toBe(false);
+  expect(testBoard.isValidMovePos(vec2(3, 8))).toBe(false);
 });
 
-test("isValidMove should return false if position is previous miss", () => {
+test("isValidMovePos should return false if position is previous miss", () => {
   const testBoard = board(5).receiveHit(vec2(3, 3));
-  expect(testBoard.isValidMove(vec2(3, 3))).toBe(false);
+  expect(testBoard.isValidMovePos(vec2(3, 3))).toBe(false);
 });
 
-test("isValidMove should return false if position is previous hit", () => {
+test("isValidMovePos should return false if position is previous hit", () => {
   const testBoard = board(5)
     .addShip(ship(3, vec2(0, 0), dir.right))
     .receiveHit(vec2(0, 0));
 
-  expect(testBoard.isValidMove(vec2(0, 0))).toBe(false);
-  expect(testBoard.isValidMove(vec2(0, 0))).toBe(false);
+  expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
+  expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
 });
 
-test("isValidMove should return true if not out of bounds or a previous miss/hit", () => {
+test("isValidMovePos should return true if not out of bounds or a previous miss/hit", () => {
   const testBoard = board(5).addShip(ship(3, vec2(0, 0), dir.right));
 
-  expect(testBoard.isValidMove(vec2(1, 0))).toBe(true);
-  expect(testBoard.isValidMove(vec2(2, 3))).toBe(true);
+  expect(testBoard.isValidMovePos(vec2(1, 0))).toBe(true);
+  expect(testBoard.isValidMovePos(vec2(2, 3))).toBe(true);
 });
