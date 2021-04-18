@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import AttackableBoard from "./AttackableBoard";
+import Gameboard from "./Gameboard";
+import { getValidPos } from "../logic/playerAi";
 
 // Not sure I'm okay with this approach
-function MainGame({ startingBoard, onGameOver }) {
-  const [testBoard, updateTestBoard] = useState(startingBoard);
+function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
+  const [testBoard, updateTestBoard] = useBoardPlayer;
+  const [testBoard2, updateTestBoard2] = useBoardNpc;
   const [turn, setTurn] = useState(0);
 
   // I can't check isEveryShipSunk until testBoard is updated
@@ -11,10 +14,17 @@ function MainGame({ startingBoard, onGameOver }) {
   useEffect(() => {
     if (testBoard.isEveryShipSunk()) {
       onGameOver("Player");
+    } else if (testBoard2.isEveryShipSunk()) {
+      onGameOver("NPC");
     }
-  }, [testBoard, onGameOver]);
+  }, [testBoard, testBoard2, onGameOver]);
+
+  const npcTurn = () => {
+    updateTestBoard2((prev) => prev.receiveHit(getValidPos(prev)));
+  };
 
   const incrementTurn = () => {
+    npcTurn();
     setTurn((prev) => prev + 1);
   };
 
@@ -37,6 +47,8 @@ function MainGame({ startingBoard, onGameOver }) {
         setGameboard={updateTestBoard}
         onAttack={incrementTurn}
       />
+      <h2>Player board</h2>
+      <Gameboard gameboard={testBoard2} />
     </div>
   );
 }

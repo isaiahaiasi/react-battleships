@@ -1,16 +1,8 @@
-const getEmptyArray = (len) => {
-  const arr = [];
-  for (let i = 0; i < len; i++) {
-    arr[i] = false;
-  }
-  return arr;
-};
-
 export default function ship(
   length,
   origin,
   rotation,
-  hits = getEmptyArray(length)
+  hits = Array(length).fill(false)
 ) {
   const getHits = () => [...hits];
 
