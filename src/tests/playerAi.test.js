@@ -1,6 +1,6 @@
 import gameboard from "../logic/gameboard";
 import ship from "../logic/ship";
-import { getValidPos, getValidShip } from "../logic/playerAi";
+import { getValidPos, getValidShip, getShips } from "../logic/playerAi";
 import vec2, { direction } from "../vec2";
 
 test("getValidPos() should return a valid position from a board", () => {
@@ -8,6 +8,29 @@ test("getValidPos() should return a valid position from a board", () => {
   const board = gameboard(10);
   const pos = getValidPos(board);
   expect(board.isValidMovePos(pos)).toBe(true);
+});
+
+test("player AI's getShips() returns full set of ships", () => {
+  const blankBoard = gameboard(10);
+  const ships = getShips(blankBoard);
+
+  const overlap = ships.some((ship1, i) => {
+    return ships.some((ship2, j) => {
+      return (
+        j !== i &&
+        ship1.getBoardSpaceCoords().some((coord1) => {
+          return ship2
+            .getBoardSpaceCoords()
+            .some((coord2) => coord2.equals(coord1));
+        })
+      );
+    });
+  });
+
+  expect(overlap).toBe(false);
+
+  const testBoard = ships.reduce((acc, s) => acc.addShip(s), blankBoard);
+  expect(testBoard).not.toBeUndefined();
 });
 
 describe("player AI's getValidShip()", () => {
@@ -33,7 +56,7 @@ describe("player AI's getValidShip()", () => {
   });
 
   test("should return a ship that can be safely placed on a board", () => {
-    let board = gameboard(6);
+    let board = gameboard(5);
     for (let i = 0; i < 3; i++) {
       const testShip = getValidShip(board, 3);
       expect(testShip).not.toBeUndefined();

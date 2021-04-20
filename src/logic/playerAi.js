@@ -51,4 +51,17 @@ const getValidShip = (board, shipLength) => {
   return possibleShip;
 };
 
-export { getValidPos, getSmartPos, getValidShip };
+const getShips = (startingBoard) => {
+  let board = startingBoard;
+  const shipLengths = [5, 4, 3, 3, 2];
+  const ships = [];
+  for (let i = 0; i < shipLengths.length; i++) {
+    const newShip = getValidShip(board, shipLengths[i]);
+    ships.push(newShip);
+    board = board.addShip(newShip);
+  }
+
+  return ships;
+};
+
+export { getValidPos, getSmartPos, getValidShip, getShips };
