@@ -35,10 +35,21 @@ function gameboard(size, ships = [], misses = []) {
 
   const addShip = (ship) => {
     if (!isValidShipPos(ship)) {
-      throw new Error(`Tried to add ship at illegal board position`);
+      throw new Error(
+        `Tried to add ship at illegal board position ${ship
+          .getBoardSpaceCoords()
+          .map((coord) => `(${coord.x},${coord.y})`)}`
+      );
     }
 
     return gameboard(size, [...ships, ship], misses);
+  };
+
+  const addShips = (newShips) => {
+    return newShips.reduce(
+      (newBoard, ship) => newBoard.addShip(ship),
+      gameboard(size, ships, misses)
+    );
   };
 
   const receiveHit = (hitPos) => {
@@ -76,6 +87,7 @@ function gameboard(size, ships = [], misses = []) {
   return {
     size,
     addShip,
+    addShips,
     receiveHit,
     isEveryShipSunk,
     isValidShipPos,

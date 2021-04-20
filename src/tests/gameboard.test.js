@@ -30,71 +30,108 @@ test("isHitPos() should return true if position is a hit, false if not", () => {
   expect(testBoard2.isHitPos(vec2(1, 2))).toBe(true);
 });
 
-test("should throw error when attempting to hit outside array bounds", () => {
+test("receiveHit() should throw error when attempting to hit outside array bounds", () => {
   const testBoard = board(3);
   expect(() => {
     testBoard.receiveHit(vec2(4, 0));
   }).toThrowError();
 });
 
-test("isEveryShipSunk() should not give false positives", () => {
-  const testBoard = board(3).addShip(ship(3, vec2(0, 0), dir.right));
+describe("addShip()", () => {
+  test("should throw error when placing a ship on top of another ship", () => {
+    expect(() =>
+      board(5)
+        .addShip(ship(4, vec2(4, 4), dir.down))
+        .addShip(ship(5, vec2(4, 4), dir.right))
+    ).toThrowError();
+  });
 
-  expect(testBoard.isEveryShipSunk()).toBe(false);
+  // this one is always ~10x slower than the others, and I have no idea why
+  test("should throw error when adding ship outside array bounds", () => {
+    let testBoard = board(5);
+    expect(() => {
+      testBoard.addShip(ship(3, vec2(4, 3), dir.down));
+    }).toThrowError();
+  });
 });
 
-test("isEveryShipSunk() should return true when all ships are sunk", () => {
-  const testBoard = board(3)
-    .addShip(ship(3, vec2(0, 0), dir.right))
-    .receiveHit(vec2(0, 0))
-    .receiveHit(vec2(1, 0))
-    .receiveHit(vec2(2, 0))
-    .addShip(ship(2, vec2(0, 1), dir.down))
-    .receiveHit(vec2(0, 1))
-    .receiveHit(vec2(0, 2));
+describe("addShips()", () => {
+  test("should add multiple ships from array", () => {
+    const ships = [
+      ship(5, vec2(0, 2), dir.down),
+      ship(2, vec2(0, 0), dir.right),
+      ship(4, vec2(8, 4), dir.left),
+    ];
 
-  expect(testBoard.isEveryShipSunk()).toBe(true);
+    const hitVecs = [vec2(0, 2), vec2(1, 0), vec2(5, 4)];
+
+    const testBoard = board(10)
+      .addShips(ships)
+      .receiveHit(hitVecs[0])
+      .receiveHit(hitVecs[1])
+      .receiveHit(hitVecs[2]);
+
+    expect(testBoard.isHitPos(hitVecs[0])).toBe(true);
+    expect(testBoard.isHitPos(hitVecs[1])).toBe(true);
+    expect(testBoard.isHitPos(hitVecs[2])).toBe(true);
+  });
+
+  test("should throw error when trying to add overlapping ships", () => {
+    const ships = [
+      ship(5, vec2(3, 0), dir.down),
+      ship(5, vec2(0, 2), dir.right),
+    ];
+
+    expect(() => board(10).addShips(ships)).toThrowError();
+  });
 });
 
-test("should throw error when placing a ship on top of another ship", () => {
-  expect(() =>
-    board(5)
-      .addShip(ship(4, vec2(4, 4), dir.down))
-      .addShip(ship(5, vec2(4, 4), dir.right))
-  ).toThrowError();
+describe("isEveryShipSunk()", () => {
+  test("should not give false positives", () => {
+    const testBoard = board(3).addShip(ship(3, vec2(0, 0), dir.right));
+
+    expect(testBoard.isEveryShipSunk()).toBe(false);
+  });
+
+  test("should return true when all ships are sunk", () => {
+    const testBoard = board(3)
+      .addShip(ship(3, vec2(0, 0), dir.right))
+      .receiveHit(vec2(0, 0))
+      .receiveHit(vec2(1, 0))
+      .receiveHit(vec2(2, 0))
+      .addShip(ship(2, vec2(0, 1), dir.down))
+      .receiveHit(vec2(0, 1))
+      .receiveHit(vec2(0, 2));
+
+    expect(testBoard.isEveryShipSunk()).toBe(true);
+  });
 });
 
-// this one is always ~10x slower than the others, and I have no idea why
-test("should throw error when adding ship outside array bounds", () => {
-  let testBoard = board(5);
-  expect(() => {
-    testBoard.addShip(ship(3, vec2(4, 3), dir.down));
-  }).toThrowError();
-});
+describe("isValidMovePos()", () => {
+  test("should return false if position is out of bounds", () => {
+    const testBoard = board(5);
+    expect(testBoard.isValidMovePos(vec2(-1, 0))).toBe(false);
+    expect(testBoard.isValidMovePos(vec2(3, 8))).toBe(false);
+  });
 
-test("isValidMovePos should return false if position is out of bounds", () => {
-  const testBoard = board(5);
-  expect(testBoard.isValidMovePos(vec2(-1, 0))).toBe(false);
-  expect(testBoard.isValidMovePos(vec2(3, 8))).toBe(false);
-});
+  test("should return false if position is previous miss", () => {
+    const testBoard = board(5).receiveHit(vec2(3, 3));
+    expect(testBoard.isValidMovePos(vec2(3, 3))).toBe(false);
+  });
 
-test("isValidMovePos should return false if position is previous miss", () => {
-  const testBoard = board(5).receiveHit(vec2(3, 3));
-  expect(testBoard.isValidMovePos(vec2(3, 3))).toBe(false);
-});
+  test("should return false if position is previous hit", () => {
+    const testBoard = board(5)
+      .addShip(ship(3, vec2(0, 0), dir.right))
+      .receiveHit(vec2(0, 0));
 
-test("isValidMovePos should return false if position is previous hit", () => {
-  const testBoard = board(5)
-    .addShip(ship(3, vec2(0, 0), dir.right))
-    .receiveHit(vec2(0, 0));
+    expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
+    expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
+  });
 
-  expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
-  expect(testBoard.isValidMovePos(vec2(0, 0))).toBe(false);
-});
+  test("should return true if not out of bounds or a previous miss/hit", () => {
+    const testBoard = board(5).addShip(ship(3, vec2(0, 0), dir.right));
 
-test("isValidMovePos should return true if not out of bounds or a previous miss/hit", () => {
-  const testBoard = board(5).addShip(ship(3, vec2(0, 0), dir.right));
-
-  expect(testBoard.isValidMovePos(vec2(1, 0))).toBe(true);
-  expect(testBoard.isValidMovePos(vec2(2, 3))).toBe(true);
+    expect(testBoard.isValidMovePos(vec2(1, 0))).toBe(true);
+    expect(testBoard.isValidMovePos(vec2(2, 3))).toBe(true);
+  });
 });

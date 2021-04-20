@@ -14,18 +14,17 @@ test("player AI's getShips() returns full set of ships", () => {
   const blankBoard = gameboard(10);
   const ships = getShips(blankBoard);
 
-  const overlap = ships.some((ship1, i) => {
-    return ships.some((ship2, j) => {
-      return (
+  const overlap = ships.some((ship1, i) =>
+    ships.some(
+      (ship2, j) =>
         j !== i &&
         ship1.getBoardSpaceCoords().some((coord1) => {
           return ship2
             .getBoardSpaceCoords()
             .some((coord2) => coord2.equals(coord1));
         })
-      );
-    });
-  });
+    )
+  );
 
   expect(overlap).toBe(false);
 
