@@ -2,14 +2,21 @@ export default function ship(
   length,
   origin,
   rotation,
-  hits = Array(length).fill(false)
+  localHits = Array(length).fill(false)
 ) {
-  const getHits = () => [...hits];
+  const getHits = () =>
+    localHits.reduce(
+      (acc, hit, i) => (hit ? [...acc, getBoardSpaceCoord(i)] : acc),
+      []
+    );
+
+  const getBoardSpaceCoord = (segmentIndex) =>
+    rotation.multiply(segmentIndex).add(origin);
 
   const getBoardSpaceCoords = () => {
     const boardSpaceCoords = [];
     for (let i = 0; i < length; i++) {
-      boardSpaceCoords.push(rotation.multiply(i).add(origin));
+      boardSpaceCoords.push(getBoardSpaceCoord(i));
     }
     return boardSpaceCoords;
   };
@@ -18,18 +25,20 @@ export default function ship(
     if (hitPos > length - 1 || hitPos < 0) {
       throw new Error(`Tried to hit a ship at illegal position ${hitPos}`);
     }
-    const newHits = getHits();
+    const newHits = [...localHits];
     newHits[hitPos] = true;
     return ship(length, origin, rotation, newHits);
   };
 
-  const isSunk = () => !hits.includes(false);
+  const isSunk = () => !localHits.includes(false);
 
   return {
     length,
     hit,
-    getHits,
     isSunk,
     getBoardSpaceCoords,
+    get hits() {
+      return getHits();
+    },
   };
 }

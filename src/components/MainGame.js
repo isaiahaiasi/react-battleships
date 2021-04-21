@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import AttackableBoard from "./AttackableBoard";
+import EnemyBoard from "./AttackableBoard";
 import Gameboard from "./Gameboard";
 import { getValidPos } from "../logic/playerAi";
+import BoardHitsMisses from "./BoardHitsMisses";
 
 // Not sure I'm okay with this approach
 function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
@@ -42,13 +43,15 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
       <h1>REACT-BATTLESHIP</h1>
       <div>Turn: {turn}</div>
       <h2>NPC board</h2>
-      <AttackableBoard
+      <EnemyBoard
         gameboard={testBoard}
         setGameboard={updateTestBoard}
         onAttack={incrementTurn}
       />
       <h2>Player board</h2>
-      <Gameboard gameboard={testBoard2} />
+      <Gameboard gameboard={testBoard2}>
+        <BoardHitsMisses hits={testBoard2.hits} misses={testBoard2.misses} />
+      </Gameboard>
     </div>
   );
 }

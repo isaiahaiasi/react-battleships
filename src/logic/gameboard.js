@@ -12,17 +12,10 @@ function gameboard(size, ships = [], misses = []) {
 
   const isMissPos = (pos) => misses.some((miss) => miss.equals(pos));
 
-  const isHitPos = (pos) => {
-    return ships.some((ship) => {
-      const boardSpaceCoords = ship.getBoardSpaceCoords();
+  const isHitPos = (pos) =>
+    ships.some((ship) => ship.hits.some((hitPos) => hitPos.equals(pos)));
 
-      return ship
-        .getHits()
-        .some(
-          (segment, i) => boardSpaceCoords[i].equals(pos) && segment === true
-        );
-    });
-  };
+  const getHits = () => ships.reduce((acc, ship) => [...acc, ...ship.hits], []);
 
   const isValidShipPos = (ship) =>
     ship
@@ -94,5 +87,9 @@ function gameboard(size, ships = [], misses = []) {
     isValidMovePos,
     isMissPos,
     isHitPos,
+    misses,
+    get hits() {
+      return getHits();
+    },
   };
 }
