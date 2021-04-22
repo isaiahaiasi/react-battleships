@@ -34,6 +34,8 @@ export default function ship(
 
   return {
     length,
+    origin,
+    rotation,
     hit,
     isSunk,
     getBoardSpaceCoords,

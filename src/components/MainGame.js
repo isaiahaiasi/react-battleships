@@ -3,6 +3,7 @@ import EnemyBoard from "./AttackableBoard";
 import Gameboard from "./Gameboard";
 import { getValidPos } from "../logic/playerAi";
 import BoardHitsMisses from "./BoardHitsMisses";
+import RenderShips from "./RenderShips";
 
 // Not sure I'm okay with this approach
 function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
@@ -51,6 +52,7 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
       <h2>Player board</h2>
       <Gameboard gameboard={testBoard2}>
         <BoardHitsMisses hits={testBoard2.hits} misses={testBoard2.misses} />
+        <RenderShips ships={testBoard2.ships} />
       </Gameboard>
     </div>
   );

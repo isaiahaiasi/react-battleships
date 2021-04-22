@@ -2,7 +2,6 @@ import StyledHit from "../styled-components/styled-hit";
 import StyledMiss from "../styled-components/styled-miss";
 
 export default function BoardHitsMisses({ hits, misses }) {
-  console.log(hits);
   const getKey = (pos) => `(${pos.x}, ${pos.y})`;
   return (
     <>

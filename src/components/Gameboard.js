@@ -4,6 +4,7 @@ import vec2 from "../vec2";
 
 export default function Gameboard({
   onCellClick = () => {},
+  onCellMouseEnter = () => {},
   gameboard,
   children,
 }) {
@@ -16,8 +17,8 @@ export default function Gameboard({
         rows.push(
           <div
             key={j + i * gameboard.size}
-            // TODO: pretty sure there's a better way
             onClick={() => onCellClick(pos)}
+            onMouseEnter={() => onCellMouseEnter(pos)}
             style={{ gridColumn: pos.x + 1, gridRow: pos.y + 1 }}
             className="grid-bg"
           >
@@ -29,6 +30,7 @@ export default function Gameboard({
     }
     return rows;
   };
+
   return (
     <StyledBoard size={gameboard.size}>
       {renderBoard()}

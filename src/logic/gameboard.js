@@ -79,6 +79,7 @@ function gameboard(size, ships = [], misses = []) {
 
   return {
     size,
+    ships,
     addShip,
     addShips,
     receiveHit,
