@@ -7,22 +7,22 @@ import RenderShips from "./RenderShips";
 
 // Not sure I'm okay with this approach
 function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
-  const [testBoard, updateTestBoard] = useBoardPlayer;
-  const [testBoard2, updateTestBoard2] = useBoardNpc;
+  const [playerBoard, setPlayerBoard] = useBoardPlayer;
+  const [npcBoard, setNpcBoard] = useBoardNpc;
   const [turn, setTurn] = useState(0);
 
   // I can't check isEveryShipSunk until testBoard is updated
   // and I'm not sure yet how to properly handle that in my incrementTurn cb
   useEffect(() => {
-    if (testBoard.isEveryShipSunk()) {
+    if (npcBoard.isEveryShipSunk()) {
       onGameOver("Player");
-    } else if (testBoard2.isEveryShipSunk()) {
+    } else if (playerBoard.isEveryShipSunk()) {
       onGameOver("NPC");
     }
-  }, [testBoard, testBoard2, onGameOver]);
+  }, [playerBoard, npcBoard, onGameOver]);
 
   const npcTurn = () => {
-    updateTestBoard2((prev) => prev.receiveHit(getValidPos(prev)));
+    setPlayerBoard((prev) => prev.receiveHit(getValidPos(prev)));
   };
 
   const incrementTurn = () => {
@@ -31,28 +31,18 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        padding: "2rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <h1>REACT-BATTLESHIP</h1>
+    <div>
       <div>Turn: {turn}</div>
       <h2>NPC board</h2>
       <EnemyBoard
-        gameboard={testBoard}
-        setGameboard={updateTestBoard}
+        gameboard={npcBoard}
+        setGameboard={setNpcBoard}
         onAttack={incrementTurn}
       />
       <h2>Player board</h2>
-      <Gameboard gameboard={testBoard2}>
-        <BoardHitsMisses hits={testBoard2.hits} misses={testBoard2.misses} />
-        <RenderShips ships={testBoard2.ships} />
+      <Gameboard gameboard={playerBoard}>
+        <BoardHitsMisses hits={playerBoard.hits} misses={playerBoard.misses} />
+        <RenderShips ships={playerBoard.ships} />
       </Gameboard>
     </div>
   );

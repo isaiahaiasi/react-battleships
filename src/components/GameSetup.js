@@ -3,13 +3,16 @@ import ship from "../logic/ship";
 import Gameboard from "./Gameboard";
 import RenderShips from "./RenderShips";
 import RenderShipPreview from "./RenderShipPreview";
+import vec2, { direction } from "../vec2";
 
-export default function GameSetup({ useBoardPlayer, onAllShipsPlaced }) {
-  const [board, setBoard] = useBoardPlayer;
-  const [currentShip, setCurrentShip] = useState();
-  const [shipIndex, setShipIndex] = useState(0);
-
+export default function GameSetup({ useBoard, onAllShipsPlaced }) {
   const shipLengths = [5, 4, 3, 3, 2];
+  const [shipIndex, setShipIndex] = useState(0);
+  const [currentShip, setCurrentShip] = useState(
+    ship(shipLengths[shipIndex], vec2(-10, -10), direction.right)
+  );
+
+  const [board, setBoard] = useBoard;
 
   const setShipPos = (_ship, pos) => ship(_ship.length, pos, _ship.rotation);
 
@@ -28,11 +31,14 @@ export default function GameSetup({ useBoardPlayer, onAllShipsPlaced }) {
         ship(shipLengths[shipIndex + 1], pos, mostCurrentShip.rotation)
       );
       setShipIndex((prevIndex) => prevIndex + 1);
+    } else {
+      onAllShipsPlaced();
     }
   };
 
   return (
     <div>
+      <h2>Place your ships!</h2>
       <Gameboard
         gameboard={board}
         onCellMouseEnter={setCurrentShipPos}
