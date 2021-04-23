@@ -14,14 +14,23 @@ export default function RenderShip({
     const xStart =
       ship.rotation.x >= 0
         ? ship.origin.x + 1
-        : ship.origin.x - ship.length + 2;
+        : Math.max(1, ship.origin.x - ship.length + 2);
     const yStart =
       ship.rotation.y >= 0
         ? ship.origin.y + 1
-        : ship.origin.y - ship.length + 2;
+        : Math.max(1, ship.origin.y - ship.length + 2);
 
-    const xSpan = ship.rotation.x !== 0 ? ship.length : 1;
-    const ySpan = ship.rotation.y !== 0 ? ship.length : 1;
+    // I'm so, so sorry for what I'm about to do
+    // prettier-ignore
+    const getSpan = (rotation, origin) =>
+      rotation === 0
+        ? 1 // if 0, span 1
+        : rotation > 0
+          ? ship.length // else, if > 0, span = length
+          : Math.min(origin + 1, ship.length); // BUT if < 0, min is origin
+
+    const xSpan = getSpan(ship.rotation.x, ship.origin.x);
+    const ySpan = getSpan(ship.rotation.y, ship.origin.y);
 
     return {
       gridColumn: `${xStart} / span ${xSpan}`,
@@ -34,7 +43,6 @@ export default function RenderShip({
   return (
     <>
       <div
-        onClick={() => console.log("hi")}
         style={{
           ...customStyle,
           ...sunkStyle(),
