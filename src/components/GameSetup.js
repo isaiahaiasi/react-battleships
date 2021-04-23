@@ -16,6 +16,13 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
 
   const setShipPos = (_ship, pos) => ship(_ship.length, pos, _ship.rotation);
 
+  const incrementShipRotation = (_ship, incrementQuantity = 1) =>
+    ship(
+      _ship.length,
+      _ship.origin,
+      direction.increment(_ship.rotation, incrementQuantity)
+    );
+
   const isValidPos = (_ship) => useBoard[0].isValidShipPos(_ship);
 
   const setCurrentShipPos = (pos) => {
@@ -47,17 +54,32 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
   return (
     <div>
       <h2>Place your ships!</h2>
-      <Gameboard
-        gameboard={board}
-        onCellMouseEnter={setCurrentShipPos}
-        onCellClick={placeShip}
+      <div
+        onWheel={(e) =>
+          e.deltaY > 0
+            ? setCurrentShip((prevShip) => incrementShipRotation(prevShip))
+            : setCurrentShip((prevShip) => incrementShipRotation(prevShip, 3))
+        }
       >
-        <RenderShipPreview
-          ship={currentShip}
-          isValidPos={isValidPos(currentShip)}
-        />
-        <RenderShips ships={board.ships} />
-      </Gameboard>
+        <Gameboard
+          gameboard={board}
+          onCellMouseEnter={setCurrentShipPos}
+          onCellClick={placeShip}
+        >
+          <RenderShipPreview
+            ship={currentShip}
+            isValidPos={isValidPos(currentShip)}
+          />
+          <RenderShips ships={board.ships} />
+        </Gameboard>
+      </div>
+      <button
+        onClick={() =>
+          setCurrentShip((prevShip) => incrementShipRotation(prevShip))
+        }
+      >
+        Rotate
+      </button>
     </div>
   );
 }

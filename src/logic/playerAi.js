@@ -1,4 +1,4 @@
-import vec2, { indexedDirection as iDir } from "../vec2";
+import vec2, { direction as dir } from "../vec2";
 import ship from "./ship";
 
 // get a random legal position
@@ -36,7 +36,7 @@ const getValidShip = (board, shipLength) => {
     possibleShip = ship(
       shipLength,
       getValidPos(board),
-      iDir[Math.floor(Math.random() * iDir.length)]
+      dir.indexed[Math.floor(Math.random() * dir.indexed.length)]
     );
     i++;
   } while (!board.isValidShipPos(possibleShip) && i < MAX_ITERATIONS);

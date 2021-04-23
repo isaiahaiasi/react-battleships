@@ -18,18 +18,29 @@ const vec2 = (x, y) => {
   });
 };
 
-export const direction = Object.freeze({
+const cardinalDirections = Object.freeze({
   up: vec2(0, -1),
   right: vec2(1, 0),
   down: vec2(0, 1),
   left: vec2(-1, 0),
 });
 
-export const indexedDirection = [
-  direction.up,
-  direction.right,
-  direction.down,
-  direction.left,
+const indexedDirections = [
+  cardinalDirections.up,
+  cardinalDirections.right,
+  cardinalDirections.down,
+  cardinalDirections.left,
 ];
+
+export const direction = Object.freeze({
+  ...cardinalDirections,
+  indexed: indexedDirections,
+  increment: (dir, incrementQuantity) =>
+    indexedDirections[
+      (indexedDirections.findIndex((iDir) => iDir.equals(dir)) +
+        incrementQuantity) %
+        indexedDirections.length
+    ],
+});
 
 export default vec2;
