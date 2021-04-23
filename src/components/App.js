@@ -12,9 +12,7 @@ const GAME_MODES = {
 };
 
 export default function App() {
-  const useBoardPlayer = useState(
-    () => gameboard(10) //.addShips(ai.getShips(gameboard(10)))
-  );
+  const useBoardPlayer = useState(() => gameboard(10));
 
   const useBoardNpc = useState(() =>
     gameboard(10).addShips(ai.getShips(gameboard(10)))
@@ -23,8 +21,8 @@ export default function App() {
   const [gameScene, setGameScene] = useState({ mode: GAME_MODES.setup });
 
   const initializeGame = () => {
-    const [playerBoard, setPlayerBoard] = useBoardPlayer;
-    const [npcBoard, setNpcBoard] = useBoardNpc;
+    const [, setPlayerBoard] = useBoardPlayer;
+    const [, setNpcBoard] = useBoardNpc;
 
     setPlayerBoard(gameboard(10));
     setNpcBoard(gameboard(10).addShips(ai.getShips(gameboard(10))));

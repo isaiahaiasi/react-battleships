@@ -16,12 +16,20 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
 
   const setShipPos = (_ship, pos) => ship(_ship.length, pos, _ship.rotation);
 
+  const isValidPos = (_ship) => useBoard[0].isValidShipPos(_ship);
+
   const setCurrentShipPos = (pos) => {
     setCurrentShip((prevShip) => setShipPos(prevShip, pos));
   };
 
   const placeShip = (pos) => {
     const mostCurrentShip = setShipPos(currentShip, pos);
+
+    if (!isValidPos(mostCurrentShip)) {
+      console.log("Oops! Can't place ship there!");
+      return;
+    }
+
     setBoard((prevBoard) => prevBoard.addShip(mostCurrentShip));
 
     if (shipIndex < shipLengths.length - 1) {
@@ -44,7 +52,10 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
         onCellMouseEnter={setCurrentShipPos}
         onCellClick={placeShip}
       >
-        <RenderShipPreview previewShip={currentShip} />
+        <RenderShipPreview
+          ship={currentShip}
+          isValidPos={isValidPos(currentShip)}
+        />
         <RenderShips ships={board.ships} />
       </Gameboard>
     </div>

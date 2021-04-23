@@ -29,11 +29,26 @@ export default function RenderShip({
     };
   };
 
+  const sunkStyle = () => (ship.isSunk() ? { background: "red" } : {});
+
   return (
     <>
-      <div style={{ ...customStyle, ...getGridPosition() }}></div>
       <div
-        style={{ gridColumn: ship.origin.x + 1, gridRow: ship.origin.y + 1 }}
+        onClick={() => console.log("hi")}
+        style={{
+          ...customStyle,
+          ...sunkStyle(),
+          ...getGridPosition(),
+          pointerEvents: "none",
+        }}
+      ></div>
+      <div
+        style={{
+          gridColumn: ship.origin.x + 1,
+          gridRow: ship.origin.y + 1,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
       >
         X
       </div>

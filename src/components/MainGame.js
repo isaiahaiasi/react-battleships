@@ -5,7 +5,6 @@ import { getValidPos } from "../logic/playerAi";
 import BoardHitsMisses from "./BoardHitsMisses";
 import RenderShips from "./RenderShips";
 
-// Not sure I'm okay with this approach
 function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
   const [playerBoard, setPlayerBoard] = useBoardPlayer;
   const [npcBoard, setNpcBoard] = useBoardNpc;
