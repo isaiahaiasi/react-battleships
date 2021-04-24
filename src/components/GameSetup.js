@@ -23,7 +23,7 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
       direction.increment(_ship.rotation, incrementQuantity)
     );
 
-  const isValidPos = (_ship) => useBoard[0].isValidShipPos(_ship);
+  const isValidPos = (_ship) => useBoard[0].isValidShip(_ship);
 
   const setCurrentShipPos = (pos) => {
     setCurrentShip((prevShip) => setShipPos(prevShip, pos));

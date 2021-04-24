@@ -36,11 +36,11 @@ export default function ship(
     length,
     origin,
     rotation,
-    hit,
-    isSunk,
-    getBoardSpaceCoords,
     get hits() {
       return getHits();
     },
+    hit,
+    isSunk,
+    getBoardSpaceCoords,
   };
 }

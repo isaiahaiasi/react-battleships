@@ -41,7 +41,6 @@ describe("gameboard properties", () => {
   });
 });
 
-// TODO: rewrite to use #ships instead of #isHitPos()
 describe("addShip()", () => {
   test("should throw error when placing a ship on top of another ship", () => {
     expect(() =>
@@ -114,19 +113,19 @@ describe("isEveryShipSunk()", () => {
   });
 });
 
-describe("isValidShipPos()", () => {
+describe("isValidShip()", () => {
   test("should return false ship would be out of bounds", () => {
     const gb = board(10);
-    expect(gb.isValidShipPos(ship(3, vec2(-2, 0), dir.up))).toBe(false);
+    expect(gb.isValidShip(ship(3, vec2(-2, 0), dir.up))).toBe(false);
   });
   test("should return false if ship would intersect another ship", () => {
     const gb = board(10).addShip(ship(6, vec2(3, 0), dir.down));
-    expect(gb.isValidShipPos(ship(4, vec2(5, 3), dir.left))).toBe(false);
+    expect(gb.isValidShip(ship(4, vec2(5, 3), dir.left))).toBe(false);
   });
 
   test("should return true if ship position is valid", () => {
     const gb = board(10).addShip(ship(6, vec2(3, 0), dir.down));
-    expect(gb.isValidShipPos(ship(4, vec2(5, 3), dir.right))).toBe(true);
+    expect(gb.isValidShip(ship(4, vec2(5, 3), dir.right))).toBe(true);
   });
 });
 

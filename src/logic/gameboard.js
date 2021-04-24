@@ -17,7 +17,7 @@ function gameboard(size, ships = [], misses = []) {
 
   const getHits = () => ships.reduce((acc, ship) => [...acc, ...ship.hits], []);
 
-  const isValidShipPos = (ship) =>
+  const isValidShip = (ship) =>
     ship
       .getBoardSpaceCoords()
       .every((pos) => !isOutOfBounds(pos) && !posContainsShip(pos));
@@ -27,7 +27,7 @@ function gameboard(size, ships = [], misses = []) {
   };
 
   const addShip = (ship) => {
-    if (!isValidShipPos(ship)) {
+    if (!isValidShip(ship)) {
       throw new Error(
         `Tried to add ship at illegal board position ${ship
           .getBoardSpaceCoords()
@@ -88,7 +88,7 @@ function gameboard(size, ships = [], misses = []) {
     addShips,
     receiveHit,
     isEveryShipSunk,
-    isValidShipPos,
+    isValidShip,
     isValidMovePos,
   };
 }

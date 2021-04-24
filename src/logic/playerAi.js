@@ -21,6 +21,8 @@ const getSmartPos = (board) => {
   // surrounding positions
 };
 
+// TODO: shouldn't reattempt failed positions
+// TODO: should be able to backtrack, so if random positions prevent placing
 const getValidShip = (board, shipLength) => {
   if (board.size < shipLength) {
     throw new Error(
@@ -31,7 +33,6 @@ const getValidShip = (board, shipLength) => {
   let possibleShip;
   let i = 0;
   const MAX_ITERATIONS = 999;
-  // TODO: shouldn't reattempt failed positions
   do {
     possibleShip = ship(
       shipLength,
@@ -39,7 +40,7 @@ const getValidShip = (board, shipLength) => {
       dir.indexed[Math.floor(Math.random() * dir.indexed.length)]
     );
     i++;
-  } while (!board.isValidShipPos(possibleShip) && i < MAX_ITERATIONS);
+  } while (!board.isValidShip(possibleShip) && i < MAX_ITERATIONS);
 
   if (i >= MAX_ITERATIONS) {
     console.log(
