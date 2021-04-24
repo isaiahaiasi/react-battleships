@@ -2,39 +2,43 @@ import board from "../logic/gameboard";
 import ship from "../logic/ship";
 import vec2, { direction as dir } from "../vec2";
 
-test("gameboard size should be accurate", () => {
-  const testBoard = board(3);
-  expect(testBoard.size).toBe(3);
-});
+describe("gameboard properties", () => {
+  test("size - should be accurate", () => {
+    const testBoard = board(3);
+    expect(testBoard.size).toBe(3);
+  });
 
-test("isMissPos() should return true if position is a miss, false if not", () => {
-  const testBoard = board(3);
-  const testBoardHit = testBoard.receiveHit(vec2(0, 0));
-  expect(testBoardHit).not.toBe(testBoard);
-  expect(testBoardHit.isMissPos(vec2(0, 0))).toBe(true);
-  expect(testBoardHit.isMissPos(vec2(1, 0))).toBe(false);
-});
+  test("ships - should be accurate", () => {
+    const ships = [ship(3, vec2(0, 6), dir.up), ship(4, vec2(3, 4), dir.right)];
+    const gb = board(10).addShip(ships[0]).addShip(ships[1]);
 
-// currently, only one ship's hitPos's are being remembered at a time
-// when another ship takes damage, the previous one is forgotten
-test("isHitPos() should return true if position is a hit, false if not", () => {
-  const testBoard = board(10)
-    .addShip(ship(3, vec2(0, 0), dir.down))
-    .addShip(ship(4, vec2(1, 2), dir.right))
-    .receiveHit(vec2(1, 2));
-  expect(testBoard.isHitPos(vec2(1, 2))).toBe(true);
-  expect(testBoard.isHitPos(vec2(0, 0))).toBe(false);
+    expect(gb.ships).not.toBeUndefined();
+    expect(gb.ships).not.toEqual([ships[0]]);
+    expect(gb.ships).toEqual(ships);
+  });
 
-  // I had a completely messed up the splice on the ships array all week... smdh
-  const testBoard2 = testBoard.receiveHit(vec2(0, 0));
-  expect(testBoard2.isHitPos(vec2(1, 2))).toBe(true);
-});
+  test("misses - should be accurate", () => {
+    const ships = [ship(3, vec2(0, 6), dir.up), ship(4, vec2(3, 4), dir.right)];
+    const gb = board(10).addShips(ships);
 
-test("receiveHit() should throw error when attempting to hit outside array bounds", () => {
-  const testBoard = board(3);
-  expect(() => {
-    testBoard.receiveHit(vec2(4, 0));
-  }).toThrowError();
+    // hits should not show up in misses
+    const gbHit = gb.receiveHit(vec2(0, 6));
+    expect(gbHit.misses.length).toBe(0);
+
+    const gbMiss = gbHit.receiveHit(vec2(1, 6)).receiveHit(vec2(3, 5));
+    expect(gbMiss.misses.length).toBe(2);
+    expect(JSON.stringify(gbMiss.misses)).toEqual(
+      JSON.stringify([vec2(1, 6), vec2(3, 5)])
+    );
+  });
+
+  test("hits - should be accurate", () => {
+    const ships = [ship(3, vec2(0, 6), dir.up), ship(4, vec2(3, 4), dir.right)];
+    const gb = board(10).addShips(ships);
+
+    const gbHit = gb.receiveHit(vec2(0, 6));
+    expect(gbHit.hits.length).toBe(1);
+  });
 });
 
 describe("addShip()", () => {
@@ -86,6 +90,15 @@ describe("addShips()", () => {
   });
 });
 
+describe("receiveHit()", () => {
+  test("should throw error when attempting to hit outside array bounds", () => {
+    const testBoard = board(3);
+    expect(() => {
+      testBoard.receiveHit(vec2(4, 0));
+    }).toThrowError();
+  });
+});
+
 describe("isEveryShipSunk()", () => {
   test("should not give false positives", () => {
     const testBoard = board(3).addShip(ship(3, vec2(0, 0), dir.right));
@@ -104,6 +117,22 @@ describe("isEveryShipSunk()", () => {
       .receiveHit(vec2(0, 2));
 
     expect(testBoard.isEveryShipSunk()).toBe(true);
+  });
+});
+
+describe("isValidShipPos()", () => {
+  test("should return false ship would be out of bounds", () => {
+    const gb = board(10);
+    expect(gb.isValidShipPos(ship(3, vec2(-2, 0), dir.up))).toBe(false);
+  });
+  test("should return false if ship would intersect another ship", () => {
+    const gb = board(10).addShip(ship(6, vec2(3, 0), dir.down));
+    expect(gb.isValidShipPos(ship(4, vec2(5, 3), dir.left))).toBe(false);
+  });
+
+  test("should return true if ship position is valid", () => {
+    const gb = board(10).addShip(ship(6, vec2(3, 0), dir.down));
+    expect(gb.isValidShipPos(ship(4, vec2(5, 3), dir.right))).toBe(true);
   });
 });
 
@@ -133,5 +162,29 @@ describe("isValidMovePos()", () => {
 
     expect(testBoard.isValidMovePos(vec2(1, 0))).toBe(true);
     expect(testBoard.isValidMovePos(vec2(2, 3))).toBe(true);
+  });
+});
+
+describe("isMissPos()", () => {
+  test("should return true if position is a miss, false if not", () => {
+    const testBoard = board(3);
+    const testBoardHit = testBoard.receiveHit(vec2(0, 0));
+    expect(testBoardHit).not.toBe(testBoard);
+    expect(testBoardHit.isMissPos(vec2(0, 0))).toBe(true);
+    expect(testBoardHit.isMissPos(vec2(1, 0))).toBe(false);
+  });
+});
+
+describe("isHitPos()", () => {
+  test("should return true if position is a hit, false if not", () => {
+    const testBoard = board(10)
+      .addShip(ship(3, vec2(0, 0), dir.down))
+      .addShip(ship(4, vec2(1, 2), dir.right))
+      .receiveHit(vec2(1, 2));
+    expect(testBoard.isHitPos(vec2(1, 2))).toBe(true);
+    expect(testBoard.isHitPos(vec2(0, 0))).toBe(false);
+
+    const testBoard2 = testBoard.receiveHit(vec2(0, 0));
+    expect(testBoard2.isHitPos(vec2(1, 2))).toBe(true);
   });
 });

@@ -80,6 +80,10 @@ function gameboard(size, ships = [], misses = []) {
   return {
     size,
     ships,
+    misses,
+    get hits() {
+      return getHits();
+    },
     addShip,
     addShips,
     receiveHit,
@@ -88,9 +92,5 @@ function gameboard(size, ships = [], misses = []) {
     isValidMovePos,
     isMissPos,
     isHitPos,
-    misses,
-    get hits() {
-      return getHits();
-    },
   };
 }
