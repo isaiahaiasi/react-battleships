@@ -90,7 +90,5 @@ function gameboard(size, ships = [], misses = []) {
     isEveryShipSunk,
     isValidShipPos,
     isValidMovePos,
-    isMissPos,
-    isHitPos,
   };
 }

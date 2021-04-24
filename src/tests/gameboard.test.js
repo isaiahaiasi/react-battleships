@@ -41,6 +41,7 @@ describe("gameboard properties", () => {
   });
 });
 
+// TODO: rewrite to use #ships instead of #isHitPos()
 describe("addShip()", () => {
   test("should throw error when placing a ship on top of another ship", () => {
     expect(() =>
@@ -67,17 +68,10 @@ describe("addShips()", () => {
       ship(4, vec2(8, 4), dir.left),
     ];
 
-    const hitVecs = [vec2(0, 2), vec2(1, 0), vec2(5, 4)];
+    const testBoard = board(10).addShips(ships);
 
-    const testBoard = board(10)
-      .addShips(ships)
-      .receiveHit(hitVecs[0])
-      .receiveHit(hitVecs[1])
-      .receiveHit(hitVecs[2]);
-
-    expect(testBoard.isHitPos(hitVecs[0])).toBe(true);
-    expect(testBoard.isHitPos(hitVecs[1])).toBe(true);
-    expect(testBoard.isHitPos(hitVecs[2])).toBe(true);
+    expect(testBoard.ships.length).toBe(3);
+    expect(testBoard.ships[0]).toEqual(ships[0]);
   });
 
   test("should throw error when trying to add overlapping ships", () => {
@@ -162,29 +156,5 @@ describe("isValidMovePos()", () => {
 
     expect(testBoard.isValidMovePos(vec2(1, 0))).toBe(true);
     expect(testBoard.isValidMovePos(vec2(2, 3))).toBe(true);
-  });
-});
-
-describe("isMissPos()", () => {
-  test("should return true if position is a miss, false if not", () => {
-    const testBoard = board(3);
-    const testBoardHit = testBoard.receiveHit(vec2(0, 0));
-    expect(testBoardHit).not.toBe(testBoard);
-    expect(testBoardHit.isMissPos(vec2(0, 0))).toBe(true);
-    expect(testBoardHit.isMissPos(vec2(1, 0))).toBe(false);
-  });
-});
-
-describe("isHitPos()", () => {
-  test("should return true if position is a hit, false if not", () => {
-    const testBoard = board(10)
-      .addShip(ship(3, vec2(0, 0), dir.down))
-      .addShip(ship(4, vec2(1, 2), dir.right))
-      .receiveHit(vec2(1, 2));
-    expect(testBoard.isHitPos(vec2(1, 2))).toBe(true);
-    expect(testBoard.isHitPos(vec2(0, 0))).toBe(false);
-
-    const testBoard2 = testBoard.receiveHit(vec2(0, 0));
-    expect(testBoard2.isHitPos(vec2(1, 2))).toBe(true);
   });
 });
