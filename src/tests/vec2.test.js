@@ -42,9 +42,28 @@ test("should be able to multiply a vector by a scalar", () => {
   expect(v3.equals(vec2(9, 15))).toBe(true);
 });
 
-test("should be able to fetch all cardinal directions", () => {
-  expect(direction.up.equals(vec2(0, -1))).toBe(true);
-  expect(direction.right.equals(vec2(1, 0))).toBe(true);
-  expect(direction.down.equals(vec2(0, 1))).toBe(true);
-  expect(direction.left.equals(vec2(-1, 0))).toBe(true);
+describe("'direction' object", () => {
+  test("should be able to fetch all cardinal directions", () => {
+    expect(direction.up.equals(vec2(0, -1))).toBe(true);
+    expect(direction.right.equals(vec2(1, 0))).toBe(true);
+    expect(direction.down.equals(vec2(0, 1))).toBe(true);
+    expect(direction.left.equals(vec2(-1, 0))).toBe(true);
+  });
+
+  test("should be able to access cardinal directions by index", () => {
+    expect(direction.up.equals(direction.indexed[0])).toBe(true);
+    expect(direction.right.equals(direction.indexed[1])).toBe(true);
+    expect(direction.down.equals(direction.indexed[2])).toBe(true);
+    expect(direction.left.equals(direction.indexed[3])).toBe(true);
+  });
+
+  test("should be able to increment cardinal direction", () => {
+    const vUp = direction.up;
+    const vLeft = direction.left;
+
+    // happy path
+    expect(direction.increment(vUp, 1).equals(direction.right)).toBe(true);
+    // should handle loop
+    expect(direction.increment(vLeft, 1).equals(direction.up)).toBe(true);
+  });
 });

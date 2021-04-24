@@ -54,3 +54,10 @@ However, I definitely came away from this approach with some concerns:
 - **Performance & space consumption**: Copying data all over the place seems like treacherous territory for optimization, and I frequently found myself writing . This isn't as large a concern as the first two, but it's something that leads me to worry that this approach wouldn't be very scalable.
 
 I also found it surprisingly difficult to plan each "logic" module's interface. I repeatedly would try to add the next user interface feature, only to realize some critical piece of information was private. This led to an interface-creep where more information was probably exposed than necessary. This isn't a React-specific problem of course, just something to be mindful of in future projects.
+
+## Areas that could be improved
+
+- I probably should have mocked the ship in my gameboard unit tests
+- When I expanded my gameboard & ship interfaces, I did not continue with TDD. Oops!
+- Obviously, I was not attentive to UI/UX.
+- My algorithm for the AI placing ships is... bad. Critically, it lacks the ability to backtrack if it makes poor choices for the first few ships, which means that it could theoretically create a board that it can't finish setting ships on, even if there are enough spaces overall. In practice, I don't use non-standard board sizes or ship sets, so this failure should never occur in the current iteration.

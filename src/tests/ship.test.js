@@ -5,6 +5,20 @@ test("Should have length", () => {
   expect(ship(3).length).toBe(3);
 });
 
+test("should have origin", () => {
+  const origin = vec2(3, 4);
+  const merryweather = ship(4, origin, direction.up);
+  expect(merryweather.origin).not.toBeUndefined();
+  expect(merryweather.origin.equals(origin)).toBe(true);
+});
+
+test("should have rotation", () => {
+  const rotation = direction.right;
+  const merryweather = ship(4, vec2(3, 4), rotation);
+  expect(merryweather.rotation).not.toBeUndefined();
+  expect(merryweather.rotation.equals(rotation)).toBe(true);
+});
+
 test("Should know whether or not it's been sunk", () => {
   let testShip = ship(3);
   expect(testShip.isSunk()).toBe(false);
@@ -16,13 +30,15 @@ test("Should know whether or not it's been sunk", () => {
   expect(testShip.isSunk()).toBe(true);
 });
 
-test("getHits() should return expected value", () => {
-  let testShip = ship(3);
-  expect(testShip.getHits()).toEqual([false, false, false]);
+test("hits should return boardspace coords of hit positions", () => {
+  let testShip = ship(3, vec2(3, 4), direction.up);
+  expect(testShip.hits).toEqual([]);
   testShip = testShip.hit(0);
-  expect(testShip.getHits()).toEqual([true, false, false]);
+  expect(JSON.stringify(testShip.hits)).toEqual(JSON.stringify([vec2(3, 4)]));
   testShip = testShip.hit(2);
-  expect(testShip.getHits()).toEqual([true, false, true]);
+  expect(JSON.stringify(testShip.hits)).toEqual(
+    JSON.stringify([vec2(3, 4), vec2(3, 2)])
+  );
 });
 
 test("should return correct board-space coordinates", () => {
