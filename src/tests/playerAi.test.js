@@ -3,36 +3,40 @@ import ship from "../logic/ship";
 import { getValidPos, getValidShip, getShips } from "../logic/playerAi";
 import vec2, { direction } from "../vec2";
 
-test("getValidPos() should return a valid position from a board", () => {
-  // I'm pretty sure I should use a mock for this, but... oh well
-  const board = gameboard(10);
-  const pos = getValidPos(board);
-  expect(board.isValidMovePos(pos)).toBe(true);
+describe("getShips()", () => {
+  test("should return full set of ships", () => {
+    const blankBoard = gameboard(10);
+    const ships = getShips(blankBoard);
+
+    const overlap = ships.some((ship1, i) =>
+      ships.some(
+        (ship2, j) =>
+          j !== i &&
+          ship1.getBoardSpaceCoords().some((coord1) => {
+            return ship2
+              .getBoardSpaceCoords()
+              .some((coord2) => coord2.equals(coord1));
+          })
+      )
+    );
+
+    expect(overlap).toBe(false);
+
+    const testBoard = ships.reduce((acc, s) => acc.addShip(s), blankBoard);
+    expect(testBoard).not.toBeUndefined();
+  });
 });
 
-test("player AI's getShips() returns full set of ships", () => {
-  const blankBoard = gameboard(10);
-  const ships = getShips(blankBoard);
-
-  const overlap = ships.some((ship1, i) =>
-    ships.some(
-      (ship2, j) =>
-        j !== i &&
-        ship1.getBoardSpaceCoords().some((coord1) => {
-          return ship2
-            .getBoardSpaceCoords()
-            .some((coord2) => coord2.equals(coord1));
-        })
-    )
-  );
-
-  expect(overlap).toBe(false);
-
-  const testBoard = ships.reduce((acc, s) => acc.addShip(s), blankBoard);
-  expect(testBoard).not.toBeUndefined();
+describe("getValidPos()", () => {
+  test("should return valid move position from a board", () => {
+    // I'm pretty sure I should use a mock for this, but... oh well
+    const board = gameboard(10);
+    const pos = getValidPos(board);
+    expect(board.isValidMovePos(pos)).toBe(true);
+  });
 });
 
-describe("player AI's getValidShip()", () => {
+describe("getValidShip()", () => {
   test("should not return undefined", () => {
     const board = gameboard(10);
     const testShip = getValidShip(board, 4);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import EnemyBoard from "./AttackableBoard";
 import Gameboard from "./Gameboard";
-import { getValidPos } from "../logic/playerAi";
+import { getSmartPos } from "../logic/playerAi";
 import BoardHitsMisses from "./BoardHitsMisses";
 import RenderShips from "./RenderShips";
 import StyledBoardContainer from "../styled-components/styled-gameboards-container";
@@ -22,7 +22,7 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
   }, [playerBoard, npcBoard, onGameOver]);
 
   const npcTurn = () => {
-    setPlayerBoard((prev) => prev.receiveHit(getValidPos(prev)));
+    setPlayerBoard((prev) => prev.receiveHit(getSmartPos(prev)));
   };
 
   const incrementTurn = () => {
