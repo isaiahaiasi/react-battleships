@@ -80,6 +80,7 @@ export default function GameSetup({ useBoard, onAllShipsPlaced }) {
       >
         Rotate
       </button>
+      <p>Rotate with scroll wheel</p>
     </div>
   );
 }

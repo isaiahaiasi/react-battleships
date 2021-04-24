@@ -1,5 +1,6 @@
 import React from "react";
 import StyledBoard from "../styled-components/styled-gameboard";
+import StyledGridCell from "../styled-components/styled-grid-cell";
 import vec2 from "../vec2";
 
 export default function Gameboard({
@@ -15,16 +16,16 @@ export default function Gameboard({
         const pos = vec2(j, i);
 
         rows.push(
-          <div
+          <StyledGridCell
             key={j + i * gameboard.size}
             onClick={() => onCellClick(pos)}
             onMouseEnter={() => onCellMouseEnter(pos)}
-            style={{ gridColumn: pos.x + 1, gridRow: pos.y + 1 }}
             className="grid-bg"
+            position={pos}
           >
-            {"ABCDEFJHIJKLMNOP".split("")[j]}
-            {i + 1}
-          </div>
+            {"ABCDEFGHIJKLMNOP".split("")[i]}
+            {j + 1}
+          </StyledGridCell>
         );
       }
     }

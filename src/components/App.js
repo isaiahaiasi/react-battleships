@@ -3,6 +3,7 @@ import gameboard from "../logic/gameboard";
 import MainGame from "./MainGame";
 import * as ai from "../logic/playerAi";
 import GameSetup from "./GameSetup";
+import Instructions from "./Instructions";
 
 const GAME_MODES = {
   rules: "rules",
@@ -18,7 +19,7 @@ export default function App() {
     gameboard(10).addShips(ai.getShips(gameboard(10)))
   );
 
-  const [gameScene, setGameScene] = useState({ mode: GAME_MODES.setup });
+  const [gameScene, setGameScene] = useState({ mode: GAME_MODES.rules });
 
   const initializeGame = () => {
     const [, setPlayerBoard] = useBoardPlayer;
@@ -32,6 +33,10 @@ export default function App() {
   const onGameOver = (winner) => {
     setGameScene({ mode: GAME_MODES.gameOver, winner });
   };
+
+  const renderInstructions = () => (
+    <Instructions onContinue={() => setGameScene({ mode: GAME_MODES.setup })} />
+  );
 
   const renderSetup = () => (
     <GameSetup
@@ -57,6 +62,8 @@ export default function App() {
 
   const selectRenderMode = (mode) => {
     switch (mode) {
+      case GAME_MODES.rules:
+        return renderInstructions();
       case GAME_MODES.main:
         return renderMainGame();
       case GAME_MODES.setup:

@@ -30,17 +30,24 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
     setTurn((prev) => prev + 1);
   };
 
+  const getSunkCount = (gameBoard) =>
+    gameBoard.ships.reduce(
+      (acc, ship) => (ship.isSunk() ? acc - 1 : acc),
+      gameBoard.ships.length
+    );
+
   return (
     <div style={{ textAlign: "center" }}>
       <div>Turn: {turn}</div>
       <StyledBoardContainer>
         <div>
-          <h2>NPC board</h2>
+          <h2>Enemy board</h2>
           <EnemyBoard
             gameboard={npcBoard}
             setGameboard={setNpcBoard}
             onAttack={incrementTurn}
           />
+          <p>Enemy ships remaining: {getSunkCount(npcBoard)}</p>
         </div>
         <div>
           <h2>Player board</h2>
@@ -51,6 +58,7 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
             />
             <RenderShips ships={playerBoard.ships} />
           </Gameboard>
+          <p>Player ships remaining: {getSunkCount(playerBoard)}</p>
         </div>
       </StyledBoardContainer>
     </div>
