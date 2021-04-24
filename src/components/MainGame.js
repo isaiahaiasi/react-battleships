@@ -4,6 +4,7 @@ import Gameboard from "./Gameboard";
 import { getValidPos } from "../logic/playerAi";
 import BoardHitsMisses from "./BoardHitsMisses";
 import RenderShips from "./RenderShips";
+import StyledBoardContainer from "../styled-components/styled-gameboards-container";
 
 function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
   const [playerBoard, setPlayerBoard] = useBoardPlayer;
@@ -30,19 +31,28 @@ function MainGame({ useBoardPlayer, useBoardNpc, onGameOver }) {
   };
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <div>Turn: {turn}</div>
-      <h2>NPC board</h2>
-      <EnemyBoard
-        gameboard={npcBoard}
-        setGameboard={setNpcBoard}
-        onAttack={incrementTurn}
-      />
-      <h2>Player board</h2>
-      <Gameboard gameboard={playerBoard}>
-        <BoardHitsMisses hits={playerBoard.hits} misses={playerBoard.misses} />
-        <RenderShips ships={playerBoard.ships} />
-      </Gameboard>
+      <StyledBoardContainer>
+        <div>
+          <h2>NPC board</h2>
+          <EnemyBoard
+            gameboard={npcBoard}
+            setGameboard={setNpcBoard}
+            onAttack={incrementTurn}
+          />
+        </div>
+        <div>
+          <h2>Player board</h2>
+          <Gameboard gameboard={playerBoard}>
+            <BoardHitsMisses
+              hits={playerBoard.hits}
+              misses={playerBoard.misses}
+            />
+            <RenderShips ships={playerBoard.ships} />
+          </Gameboard>
+        </div>
+      </StyledBoardContainer>
     </div>
   );
 }
