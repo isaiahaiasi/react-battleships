@@ -1,6 +1,7 @@
 import React from "react";
 import BoardHitsMisses from "./BoardHitsMisses";
 import Gameboard from "./Gameboard";
+import RenderShips from "./RenderShips";
 
 export default function AttackableBoard({
   gameboard: gb,
@@ -20,6 +21,7 @@ export default function AttackableBoard({
     <div>
       <Gameboard gameboard={gb} onCellClick={handleAttack}>
         <BoardHitsMisses misses={gb.misses} hits={gb.hits} />
+        <RenderShips ships={gb.ships.filter((ship) => ship.isSunk())} />
       </Gameboard>
     </div>
   );
