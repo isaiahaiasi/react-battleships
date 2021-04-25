@@ -55,7 +55,11 @@ export default function App() {
 
   const renderGameOver = () => (
     <>
-      <h2>Congratulations, {gameScene.winner}! You won!</h2>
+      {gameScene.winner === "Player" ? (
+        <h2>Congratulations, {gameScene.winner}! You won!</h2>
+      ) : (
+        <h2>Too bad! {gameScene.winner} beat you!</h2>
+      )}
       <button onClick={() => initializeGame()}>Play again?</button>
     </>
   );
