@@ -2,7 +2,7 @@
 
 The classic game "Battleship."
 
-[Play it here!](https://isaiahaiasi.github.io/react-battleships/) (currently under construction)
+## [Play it here!](https://isaiahaiasi.github.io/react-battleships/)
 
 Tech:
 
@@ -49,15 +49,15 @@ Although the focus of this project was on TDD, I think _this_ was the real chall
 
 However, I definitely came away from this approach with some concerns:
 
-- **Enforcing immutability**: It's surprisingly difficult to make an object deeply immutable in JavaScript, and I don't think I found a perfect solution to this problem. It became especially challenging once I had nested objects (eg, ships within gameboards).
-- **Taking immutability on faith**: As far as I can tell, anything that wants to consume these supposedly immutable objects has to take that immutability on faith. It has no assurance that the object will never have side-effects or contain some mutable state.
-- **Performance & space consumption**: Copying data all over the place seems like treacherous territory for optimization, and I frequently found myself writing . This isn't as large a concern as the first two, but it's something that leads me to worry that this approach wouldn't be very scalable.
+- **Creating immutable objects**: It's surprisingly difficult to make an object deeply immutable in JavaScript, and I don't think I found a perfect solution to this problem. It became especially challenging once I had nested objects (eg, ships within gameboards).
+- **Taking immutability on faith**: As far as I can tell, anything that wants to consume these supposedly immutable objects has to take that immutability on faith. It has no assurance that the object will never have side-effects or contain some mutable state. I'd like to have an easy way on the React side to verify that an object is immutable before shoving it in some State.
+- **Performance & space consumption**: Copying data all over the place seems like treacherous territory for optimization. This isn't as large a concern as the first two, but it's something that leads me to worry that this approach would limit a project's scalability.
 
-I also found it surprisingly difficult to plan each "logic" module's interface. I repeatedly would try to add the next user interface feature, only to realize some critical piece of information was private. This led to an interface-creep where more information was probably exposed than necessary. This isn't a React-specific problem of course, just something to be mindful of in future projects.
+I also found it surprisingly difficult to plan each "logic" module's interface. I repeatedly would try to add the next UI feature, only to realize some critical piece of information was private. This led to an interface-creep where more information was probably exposed than necessary. This isn't a React-specific problem of course, just something to be mindful of in future projects.
 
 ## Areas that could be improved
 
-- I probably should have mocked the ship in my gameboard unit tests
-- When I expanded my gameboard & ship interfaces, I did not continue with TDD. Oops!
-- Obviously, I was not attentive to UI/UX.
-- My algorithm for the AI placing ships is... bad. Critically, it lacks the ability to backtrack if it makes poor choices for the first few ships, which means that it could theoretically create a board that it can't finish setting ships on, even if there are enough spaces overall. In practice, I don't use non-standard board sizes or ship sets, so this failure should never occur in the current iteration.
+- I probably should have created some mocks for my test suites. For example, the ship in my gameboard unit tests
+- When I expanded my gameboard & ship interfaces, I did not continue with TDD. Oops! I did go back and add coverage, but ultimately it ended up being about 70% "TDD" and 30% "DDT."
+- Obviously, I was not attentive to UI/UX. To put it mildly.
+- My algorithm for the AI placing ships is... bad. Critically, it lacks the ability to backtrack if it makes poor choices for the first few ships, which means that it could theoretically create a board that it can't finish setting ships on, even if there are enough spaces overall. In practice, I don't use non-standard board sizes or ship sets, so this failure should never occur in the current iteration. But if I ever wanted to extend this project, this would probably have to be one of the first things I addressed.
